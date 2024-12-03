@@ -13,6 +13,9 @@ pygame.display.set_caption("Nado Game") # 게임 이름
 # 배경 이미지 불러오기 
 background = pygame.image.load("C:/Users/gkaeo/OneDrive/바탕 화면/dev/workspace/python/pygame_basic/background.png")
 
+# 캐릭터(스프라이트) 불러오기
+character = pygame.image.load("C:/Users/gkaeo/OneDrive/바탕 화면/dev/workspace/python/pygame_basic/character.png")
+
 
 # 이벤트 루프
 running = True # 게임이 진행중인가?
@@ -21,7 +24,6 @@ while running:
     if event.type == pygame.QUIT: # 창이 닫히는 이벤트가 발생하였는가?
       running = False # 게임이 진행중이 아님
     
-  # screen.fill((0, 0, 255))    
   screen.blit(background, (0, 0)) # 배경 그리기
   
   pygame.display.update() # 게임화면을 다시 그리기!
