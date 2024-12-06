@@ -29,3 +29,7 @@ browser.find_element_by_id("id").send_keys("my_id")
 
 # 6. html 정보 출력
 print(browser.page_source)
+
+# 7. 브라우저 종료
+#browser.close() # 현재 탭만 종료
+browser.quit() # 전체 브라우저 종료
