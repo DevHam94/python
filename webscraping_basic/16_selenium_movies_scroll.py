@@ -1,27 +1,3 @@
-# import requests
-# from bs4 import BeautifulSoup
-
-# url = "https://play.google.com/store/movies?hl=ko&pli=1"
-# headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-#            "Accept-Language":"ko-KR,ko"
-#            }
-
-# res = requests.get(url)
-# res.raise_for_status()
-# soup = BeautifulSoup(res.text, "lxml")
-
-# movies = soup.find_all("div", attrs={"class":""})
-# print(len(movies))
-
-# # with open("movie.html", "w", encoding="utf8") as f:
-# #   # f.write(res.text)
-# #   f.write(soup.prettify()) # html 문서를 예쁘게 출력 
-
-# for movie in movies:
-#   title = movie.find("div", attrs={"class":""}).get_text()
-#   print(title)
-
-
 from selenium import webdriver
 browser = webdriver.Chrome()
 browser.maximize_window()
@@ -51,6 +27,49 @@ while True:
   browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
   #페이지 로딩 대기
+  time.sleep(interval)
 
   # 현재 문서 높이를 가져와서 저장
-  curr_height = browser.execute_script
+  curr_height = browser.execute_script("return document.body.scrollHeight")
+  if curr_height == prev_height:
+    break
+  
+  prev_height = curr_height
+  
+print("스크롤 완료")  
+
+
+import requests
+from bs4 import BeautifulSoup
+
+soup = BeautifulSoup(browser.page_source, "lxml")
+
+# movies = soup.find_all("div", attrs={"class":["", ""]})
+movies = soup.find_all("div", attrs={"class":""})
+print(len(movies))
+
+for movie in movies:
+  title = movie.find("div", attrs={"class":""}).get_text()
+  
+  # 할인 전 가격
+  original_price = movie.find("span", attrs={"class":""})
+  if original_price:
+    original_price = original_price.get_text()
+  else:
+    print(title, "    <할인되지 않은 영화 제외")
+    continue
+  
+  # 할인된 가격
+  price = movie.find("span", attrs={"class":""})
+  
+  # 링크
+  link = movie.find("a", attrs={"class":""})["href"]
+  # 올바른 링크 : https://play.google.com + link 
+  
+  print(f"제목 : {title}")
+  print(f"할인 전 금액 : {original_price}")
+  print(f"할인 후 금액 : {price}")
+  print(F"링크 : ", "https://play.google.com" + link)
+  print("-" * 120)
+  
+browser.quit()  
